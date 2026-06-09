@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="account-layout">
+    <div class="account-container">
+        <div class="account-header">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <h2>Account Settings</h2>
+        </div>
+        
+        <div class="account-card">
+            <div class="account-card-header">
+                <h3>Active Sessions</h3>
+                <p>Manage the devices that are currently logged into your BitNotes account.</p>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="sessions-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%">Started</th>
+                            <th style="width: 55%">Device / Browser</th>
+                            <th style="width: 20%">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in sessions %}
+                        <tr>
+                            <td class="session-time">{{ s.login_time }}</td>
+                            <td class="session-agent">{{ s.user_agent }}</td>
+                            <td>
+                                {% if s.session_id == current_session_id %}
+                                    <span class="status-badge badge-active">Current Session</span>
+                                {% else %}
+                                    <span class="status-badge badge-inactive">Active</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="3" style="text-align: center; padding: 3rem; color: var(--text-muted);">No active sessions found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

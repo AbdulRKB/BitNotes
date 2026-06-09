@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="app-layout">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>My Secure Notes</h3>
+            <button class="btn btn-sm btn-primary" onclick="newNote()">+ New</button>
+        </div>
+        <div class="notes-list-scroll">
+            {% for note in notes %}
+            <div class="note-item" onclick="openNote('{{ note.title | escape }}', '{{ note.content | replace('\n', '\\n') | replace('\r', '') | escape }}')">
+                <div class="note-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                <div class="note-details">
+                    <h4>{{ note.title }}</h4>
+                    <div class="note-date">{{ note.created_at }}</div>
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p style="margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;">No notes found</p>
+                <p>Create your first secure note!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="editor-container">
+            <h2 id="editor-title">Create New Note</h2>
+            <form method="POST" action="{{ url_for('dashboard') }}" class="note-form">
+                <div class="form-group">
+                    <label for="title">Name</label>
+                    <input type="text" id="title" name="title" class="form-control form-control-lg" placeholder="e.g. Bank Account Details" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Secure Notes</label>
+                    <textarea id="content" name="content" class="form-control" placeholder="Type your secure note here..." required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        Save Note
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openNote(title, content) {
+        document.getElementById('editor-title').innerText = 'View / Edit Note';
+        document.getElementById('title').value = title;
+        document.getElementById('content').value = content;
+    }
+    function newNote() {
+        document.getElementById('editor-title').innerText = 'Create New Note';
+        document.getElementById('title').value = '';
+        document.getElementById('content').value = '';
+    }
+</script>
+{% endblock %}
